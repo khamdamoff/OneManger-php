@@ -1,3 +1,5 @@
+This branch bind 1 Onedrive. 这个分支绑定单盘。  
+
 QQ Group: 943919989  
 
 # Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
