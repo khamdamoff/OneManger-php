@@ -2,7 +2,7 @@
 
 function printInput($event, $context)
 {
-    if (strlen(json_encode($event['body']))>500) $event['body']=substr($event['body'],0,strpos($event['body'],'base64')+30) . '...Too Long!...' . substr($event['body'],-50);
+    if (strlen(json_encode($event['body']))>500) $event['body']=substr($event['body'],0,strpos($event['body'],'base64')+100) . '...Too Long!...' . substr($event['body'],-50);
     echo urldecode(json_encode($event, JSON_PRETTY_PRINT)) . '
  
 ' . urldecode(json_encode($context, JSON_PRETTY_PRINT)) . '
@@ -23,6 +23,7 @@ function GetGlobalVariable($event)
         $pos = strpos($cookievalues,"=");
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
+    $_SERVER['headers'] = $event['headers'];
     $_SERVER['USER'] = 'qcloud';
 }
 
