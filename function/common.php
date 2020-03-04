@@ -622,6 +622,7 @@ function main($path)
             if (getConfig('proxydownload')) {
                 $header = [];
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
+		else $header = [ 'Range' => 'Range: bytes=0-1048575' ];
                 $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
                 return output( base64_encode($response['body']), $response['stat'], ['Content-Type' => 'application/octet-stream'], true );
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
