@@ -32,7 +32,8 @@ if ($_SERVER['USER']==='qcloud') {
         header($headerName . ': ' . $headerVal, true);
     }
     http_response_code($re['statusCode']);
-    echo $re['body'];
+    if ($re['isBase64Encoded']) echo base64_decode($re['body']);
+    else echo $re['body'];
 }
 
 function main_handler($event, $context)
