@@ -621,7 +621,7 @@ function main($path)
         if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) {
             if (getConfig('proxydownload')) {
                 $header = [];
-                if (isset($_SERVER['headers']['range'])) $header = [ 'Range' => $_SERVER['headers']['range'] ];
+                if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
                 $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
                 return output( base64_encode($response['body']), $response['stat'], ['Content-Type' => 'application/octet-stream'], true );
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
