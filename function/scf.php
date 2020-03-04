@@ -23,7 +23,7 @@ function GetGlobalVariable($event)
         $pos = strpos($cookievalues,"=");
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
-    $_SERVER['headers'] = $event['headers'];
+    $_SERVER['HTTP_RANGE'] = $event['headers']['range'];
     $_SERVER['USER'] = 'qcloud';
 }
 
