@@ -38,6 +38,7 @@ $CommonEnv = [
     'function_name', // used in heroku.
     'language',
     'passfile',
+    'proxydownload',
     'sitename',
     'theme',
 ];
@@ -54,6 +55,7 @@ $ShowedCommonEnv = [
     //'function_name', // used in heroku.
     'language',
     'passfile',
+    'proxydownload',
     'sitename',
     'theme',
 ];
@@ -616,7 +618,14 @@ function main($path)
     $files = list_files($path);
     if (isset($files['file']) && !$_GET['preview']) {
         // is file && not preview mode
-        if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
+        if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) {
+            if (getConfig('proxydownload')) {
+                $header = [];
+                if (isset($_SERVER['headers']['range'])) $header = [ 'Range' => $_SERVER['headers']['range'] ];
+                $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
+                return output( base64_encode($response['body']), $response['stat'], ['Content-Type' => 'application/octet-stream'], true );
+            } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
+        }
     }
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
