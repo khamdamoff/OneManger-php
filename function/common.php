@@ -633,6 +633,8 @@ function main($path)
 		    }
 //Content-Length: 387780
 //Content-Range: bytes 0-387779/387780
+//"Content-Type": "application\/octet-stream",
+//"Accept-Ranges": "bytes",
 //		$head['Content-Range']
 		error_log('Header2usr:'.json_encode($head,JSON_PRETTY_PRINT));
                 return output( $response['body'], $response['stat'], $head, true );
