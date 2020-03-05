@@ -624,6 +624,7 @@ function main($path)
                 $header = [];
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
 		else $header = [ 'Range' => 'Range: bytes=0-102399' ];//1048575
+		    error_log('SERVER:'.json_encode($_SERVER,JSON_PRETTY_PRINT));
 		    error_log('Header2MS:'.json_encode($header,JSON_PRETTY_PRINT));
                 $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
 		    foreach (explode("\r\n", $response['header']) as $h) {
