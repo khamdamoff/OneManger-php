@@ -643,9 +643,11 @@ function main($path)
 		$range = $head['Content-Range'];
 		    $e = explode("-", $range)[1];
 		    $t = explode("/", $e)[1];
-		    $e = explode("-", $e)[0];
+		    $e = explode("/", $e)[0];
 		    error_log('Range:'.$head['Content-Range'].' end:'.$e.' total:'.$t);
-		    //if ($e+1==$t) 
+		    if ($e+1==$t) $response['stat'] = 200;
+		    @ob_flush();
+		    flush();
 		//error_log('Header2usr:'.json_encode($head,JSON_PRETTY_PRINT));
                 return output( $response['body'], $response['stat'], $head, true );
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
