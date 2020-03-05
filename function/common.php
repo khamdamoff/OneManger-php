@@ -625,15 +625,11 @@ function main($path)
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
 		else $header = [ 'Range' => 'Range: bytes=0-1048575' ];
                 $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
-                return output(
-			$response['body'],
-			$response['stat'],
-			[
-				'Content-Type' => 'application/octet-stream; charset=utf-8',
-				'Content-Range' => 'bytes '.$s.'-'.$e.'/'.$t,
-			],
-			true
-		);
+		    foreach (explode("\r\n", $response['header']) as $h) {
+			    $a=explode(": ", $h);
+			    if ($a[1]!='') $head[$a[0]] = $a[1];
+		    }
+                return output( $response['body'], $response['stat'], $head, true );
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
         }
     }
