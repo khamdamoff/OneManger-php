@@ -627,7 +627,7 @@ function main($path)
 		    $t = $s+1;
 		    while($s<$t) {
                 $header = [];
-			    $e = $s + $block;
+			    $e = $s + $block -1;
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
 		else $header = [ 'Range' => 'Range: bytes='.$s.'-'.$e ];//1048575
 		    //error_log('SERVER:'.json_encode($_SERVER,JSON_PRETTY_PRINT));
