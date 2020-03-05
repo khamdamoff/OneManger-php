@@ -636,7 +636,7 @@ function main($path)
 		    $header = [];
 		    foreach (explode("\r\n", $response['header']) as $h) {
 			    $a=explode(": ", $h);
-			    if ($a[1]!='') $header[$a[0]] = $a[1];
+			    if (isset($a[1])) $header[$a[0]] = $a[1];
 		    }
 //Content-Length: 387780
 //Content-Range: bytes 0-387779/387780
@@ -653,7 +653,13 @@ function main($path)
 		    error_log('Range:'.$head['Content-Range'].' end:'.$e.' total:'.$t);
 			    $s = $e+1;
 		    if ($s==$t) $response['stat'] = 200;
+			    ob_clean();
 		@ob_start();
+			    $sendHeaders = array();
+    foreach ($head as $headerName => $headerVal) {
+        header($headerName . ': ' . $headerVal, true);
+    }
+    http_response_code($response['stat']);
 			    echo $response['body'];
 		    @ob_flush();
 		    flush();
