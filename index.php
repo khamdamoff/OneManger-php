@@ -18,8 +18,7 @@ if ($_SERVER['USER']==='qcloud') {
         header($headerName . ': ' . $headerVal, true);
     }
     http_response_code($re['statusCode']);
-    if ($re['isBase64Encoded']) echo base64_decode($re['body']);
-    else echo $re['body'];
+    echo $re['body'];
 } else {
     include 'function/normal.php';
     $path = getpath();
@@ -33,8 +32,7 @@ if ($_SERVER['USER']==='qcloud') {
         header($headerName . ': ' . $headerVal, true);
     }
     http_response_code($re['statusCode']);
-    if ($re['isBase64Encoded']) echo base64_decode($re['body']);
-    else echo $re['body'];
+    echo $re['body'];
 }
 
 function main_handler($event, $context)
@@ -50,5 +48,7 @@ function main_handler($event, $context)
     //echo '<pre>'. json_encode($_COOKIE, JSON_PRETTY_PRINT).'</pre>';
     $path = GetPathSetting($event, $context);
 
-    return main($path);
+    $re = main($path);
+    if ($re['isBase64Encoded']) $re['body'] = base64_encode($re['body']);
+    return $re;
 }
