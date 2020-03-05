@@ -240,7 +240,7 @@ function curl_request($url, $data = false, $headers = [])
     list($response['header'], $response['body']) = explode("\r\n\r\n", curl_exec($ch));
     $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close($ch);
-error_log($response['header']);
+//error_log($response['header']);
     if ($response['stat']==0) return curl_request($url, $data, $headers);
     return $response;
 }
@@ -623,12 +623,17 @@ function main($path)
             if (getConfig('proxydownload')) {
                 $header = [];
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
-		else $header = [ 'Range' => 'Range: bytes=0-1048575' ];
+		else $header = [ 'Range' => 'Range: bytes=0-102399' ];//1048575
+		    error_log('Header2MS:'.$header);
                 $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
 		    foreach (explode("\r\n", $response['header']) as $h) {
 			    $a=explode(": ", $h);
 			    if ($a[1]!='') $head[$a[0]] = $a[1];
 		    }
+//Content-Length: 387780
+//Content-Range: bytes 0-387779/387780
+//		$head['Content-Range']
+		error_log('Header2usr:'.$head);
                 return output( $response['body'], $response['stat'], $head, true );
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
         }
