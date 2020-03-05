@@ -651,14 +651,14 @@ function main($path)
 		    $t = explode("/", $e)[1];
 		    $e = explode("/", $e)[0];
 		    error_log('Range:'.$head['Content-Range'].' end:'.$e.' total:'.$t);
+			if ($s==0) {	    $sendHeaders = array();
+    foreach ($head as $headerName => $headerVal) {
+        header($headerName . ': ' . $headerVal, true);
+    } }    
 			    $s = $e+1;
 		    if ($s==$t) $response['stat'] = 200;
 			    ob_clean();
 		@ob_start();
-			    $sendHeaders = array();
-    foreach ($head as $headerName => $headerVal) {
-        header($headerName . ': ' . $headerVal, true);
-    }
     http_response_code($response['stat']);
 			    echo $response['body'];
 		    @ob_flush();
