@@ -652,6 +652,7 @@ function main($path)
 		    error_log('Range:'.$head['Content-Range'].' end:'.$e.' total:'.$t);
 			    $s = $e+1;
 		    if ($s==$t) $response['stat'] = 200;
+		@ob_start();
 			    echo $response['body'];
 		    @ob_flush();
 		    flush();
