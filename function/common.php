@@ -621,9 +621,14 @@ function main($path)
         // is file && not preview mode
         if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) {
             if (getConfig('proxydownload')) {
+		    set_time_limit(0);
+		    $block = 102400;
+		    $s = 0;
+		    while($s<$t) {
                 $header = [];
+			    $e = $s + $block;
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
-		else $header = [ 'Range' => 'Range: bytes=0-102399' ];//1048575
+		else $header = [ 'Range' => 'Range: bytes='.$s.'-'.$e ];//1048575
 		    //error_log('SERVER:'.json_encode($_SERVER,JSON_PRETTY_PRINT));
 		    //error_log('Header2MS:'.json_encode($header,JSON_PRETTY_PRINT));
                 $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
@@ -645,9 +650,12 @@ function main($path)
 		    $t = explode("/", $e)[1];
 		    $e = explode("/", $e)[0];
 		    error_log('Range:'.$head['Content-Range'].' end:'.$e.' total:'.$t);
-		    if ($e+1==$t) $response['stat'] = 200;
+			    $s = $e+1;
+		    if ($s==$t) $response['stat'] = 200;
+			    echo $response['body'];
 		    @ob_flush();
 		    flush();
+		    }
 		//error_log('Header2usr:'.json_encode($head,JSON_PRETTY_PRINT));
                 return output( $response['body'], $response['stat'], $head, true );
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
