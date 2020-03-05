@@ -624,6 +624,7 @@ function main($path)
 		    set_time_limit(0);
 		    $block = 102400;
 		    $s = 0;
+		    $t = $s+1;
 		    while($s<$t) {
                 $header = [];
 			    $e = $s + $block;
