@@ -233,13 +233,14 @@ function curl_request($url, $data = false, $headers = [])
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_HEADER, 1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $sendHeaders);
-    $response['body'] = curl_exec($ch);
+    list($response['header'], $response['body']) = explode("\r\n\r\n", curl_exec($ch));
     $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close($ch);
+error_log($response['header']);
     if ($response['stat']==0) return curl_request($url, $data, $headers);
     return $response;
 }
@@ -624,7 +625,15 @@ function main($path)
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
 		else $header = [ 'Range' => 'Range: bytes=0-1048575' ];
                 $response = curl_request( $files['@microsoft.graph.downloadUrl'], '', $header );
-                return output( $response['body'], $response['stat'], ['Content-Type' => 'application/octet-stream'], true );
+                return output(
+			$response['body'],
+			$response['stat'],
+			[
+				'Content-Type' => 'application/octet-stream; charset=utf-8',
+				'Content-Range' => 'bytes '.$s.'-'.$e.'/'.$t,
+			],
+			true
+		);
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
         }
     }
