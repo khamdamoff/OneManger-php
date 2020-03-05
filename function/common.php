@@ -621,11 +621,11 @@ function main($path)
         // is file && not preview mode
         if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) {
             if (getConfig('proxydownload')) {
-		    set_time_limit(0);
+		    //set_time_limit(0);
 		    $block = 102400;
 		    $s = 0;
 		    $t = $s+1;
-		    while($s<$t) {
+		    //while($s<$t) {
                 $header = [];
 			    $e = $s + $block -1;
                 if (isset($_SERVER['HTTP_RANGE'])) $header = [ 'Range' => $_SERVER['HTTP_RANGE'] ];
@@ -638,10 +638,6 @@ function main($path)
 			    $a=explode(": ", $h);
 			    if (isset($a[1])) $header[$a[0]] = $a[1];
 		    }
-//Content-Length: 387780
-//Content-Range: bytes 0-387779/387780
-//"Content-Type": "application\/octet-stream",
-//"Accept-Ranges": "bytes",
 		    $head['Content-Length'] = $header['Content-Length'];
 		    $head['Content-Range'] = $header['Content-Range'];
 		    $head['Content-Type'] = $header['Content-Type'];
@@ -657,13 +653,13 @@ function main($path)
     } }    */
 			    $s = $e+1;
 		    if ($s==$t) $response['stat'] = 200;
-			    ob_clean();
-		@ob_start();
-    http_response_code($response['stat']);
-			    echo $response['body'];
-		    @ob_flush();
-		    flush();
-		    }
+			    //ob_clean();
+		//@ob_start();
+    //http_response_code($response['stat']);
+			    //echo $response['body'];
+		    //@ob_flush();
+		    //flush();
+		    //}
 		//error_log('Header2usr:'.json_encode($head,JSON_PRETTY_PRINT));
                 return output( $response['body'], $response['stat'], $head, true );
             } else return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
