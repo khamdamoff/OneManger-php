@@ -423,6 +423,10 @@ $constStr = [
         'ko-kr' => '확인',
         'fa' => 'ارسال',
     ],
+    'Search' => [
+        'en-us' => 'Search',
+        'zh-cn' => '搜索',
+    ],
     'Close' => [
         'en-us' => 'Close',
         'zh-cn' => '关闭',
