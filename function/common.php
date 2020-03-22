@@ -638,8 +638,9 @@ function main($path)
                 } else return output(json_encode($exts['img']),400);
             } else return output('',401);
         }
-
-        $files = list_files($path);
+        if (isset($_POST['search'])&&$_POST['search']!='') {
+            $files = search_files($path, $_POST['search']);
+        } else $files = list_files($path);
         //echo json_encode(array_keys($files['children']), JSON_PRETTY_PRINT);
         if (isset($_GET['random'])&&$_GET['random']!=='') {
             if ($_SERVER['ishidden']<4) {
@@ -687,6 +688,68 @@ function list_files($path)
             return list_files($path);
         } else return $files;
     }*/
+}
+
+function search_files($path, $searchstr)
+{
+    $path1 = path_format($path);
+    $path = path_format($_SERVER['list_path'] . path_format($path));
+    if (!($files = getcache('search_' . $searchstr))) {
+        $url = $_SERVER['api_url'].'/search(q=\''.urlencode($searchstr).'\')?select=id';
+        /*if ($path !== '/') {
+            $url .= ':' . $path;
+            if (substr($url,-1)=='/') $url=substr($url,0,-1);
+            $url .= ':/search(q=\'';
+        } else $url .= '/search(q=\'';
+        //$url .= $searchstr.'\')?select=name,size,file,folder,parentReference,lastModifiedDateTime,@microsoft.graph.downloadUrl';
+        $url .= urlencode($searchstr).'\')?select=id';*/
+        $retry = 0;
+        $arr = [];
+        while ($retry<3&&!$arr['stat']) {
+            $arr = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
+            $retry++;
+        }
+        /*echo '
+url:'.$url . '<br>'.$arr['stat'].'<pre>' . json_encode(json_decode($arr['body'], true), JSON_PRETTY_PRINT) . '</pre>';*/
+        $value = json_decode($arr['body'], true)['value'];
+        if ($arr['stat']<500) {
+            if (count($value)) {
+                foreach ($value as $item) {
+                    $url = substr($_SERVER['api_url'], 0, -4);
+                    $url .= 'items/' . $item['id'];
+                    $arr1 = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
+                    $file = json_decode($arr1['body'], true);
+                    $filename = $file['name'];
+                    $filepath = splitlast($file['parentReference']['path'], ':')[1];
+                    $filepath = substr($filepath, strlen($_SERVER['list_path']));
+                    //$filepath = $_SERVER['base_disk_path'] . $filepath;
+                    $file['name'] = path_format($filepath . '/' . $filename);
+                    $tmp[$filename] = $file;
+                    $files['children'] = $tmp;
+                    //$files['children'] = json_decode($arr['body'], true)['value'];
+                    $files['folder']['childCount'] = count($tmp);
+                }
+            } else {
+                $files['children'] = [];
+                $files['folder']['childCount'] = 0;
+            }
+            savecache('search_' . $searchstr, $files);
+            //echo $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
+            return $files;
+        } else {
+            //error_log($arr['body']);
+            $files = json_decode($arr['body'], true);
+            if (isset($files['error'])) {
+                $files['error']['stat'] = $arr['stat'];
+            } else {
+                $files['error']['stat'] = 503;
+                $files['error']['code'] = 'unknownError';
+                $files['error']['message'] = 'unknownError';
+            }
+        }
+    }
+
+    return $files;
 }
 
 function adminform($name = '', $pass = '', $path = '')
