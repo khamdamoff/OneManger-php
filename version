@@ -1,3 +1,7 @@
+20200325-2350.16
+V3 will add sharepoint.
+v3 加入 sharepoint,加盘方式及存盘方式改变
+
 20200321-1830.15
 <font color=red>本次更新后，'index.html'功能在其它主题会导致bug。</font>
 文本类文件将缓存；添加hideFunctionalityFile开关；在添加网盘时会显示已经在用的标签。
