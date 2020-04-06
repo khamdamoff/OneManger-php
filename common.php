@@ -16,6 +16,8 @@ $Base64Env = [
     //'timezone',
     //'passfile',
     'sitename',
+    'custom-script',
+    'custom-style',
     //'theme',
     //'Drive_ver',
     //'Drive_custom',
@@ -48,6 +50,8 @@ $CommonEnv = [
     'timezone',
     'passfile',
     'sitename',
+    'custom-script',
+    'custom-style',
     'theme',
 ];
 
@@ -65,6 +69,8 @@ $ShowedCommonEnv = [
     'timezone',
     'passfile',
     'sitename',
+    'custom-script',
+    'custom-style',
     'theme',
 ];
 
@@ -1297,8 +1303,70 @@ function render_list($path = '', $files = '')
     @ob_start();
 
     $theme = getConfig('theme');
-    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.php';
-    include 'theme/'.$theme;
+    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic';
+    if (substr($theme,-4)=='.php') {
+        include 'theme/'.$theme;
+    } else {
+?>
+
+<!DOCTYPE html>
+<html lang="<?php echo $constStr['language']; ?>">
+<head>
+    <title><?php echo $pretitle; if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) { if (getConfig('diskname')!='') $diskname = getConfig('diskname'); else $diskname = $_SERVER['disktag']; echo ' - ' . $diskname; } ?> - <?php echo $_SERVER['sitename'];?></title>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>">
+    <meta name="description" content="<?php if ($_GET['preview']) echo 'Preview of '.$n_path; else echo 'List of '.$n_path; ?>. OneManager(An index & manager of Onedrive auth by ysun).">
+    <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
+<?php
+        $style = getConfig('custom-style');
+        if ($style!='') {
+            echo $style;
+        } else {
+            if (file_exists('theme/'.$theme.'/style.css')) include 'theme/'.$theme.'/style.css';
+            else include 'theme/classic/style.css';
+        }
+?>
+</head>
+
+<body>
+<?php
+        if (file_exists('theme/'.$theme.'/top.php')) include 'theme/'.$theme.'/top.php';
+        else include 'theme/classic/top.php';
+
+        if (file_exists('theme/'.$theme.'/title.php')) include 'theme/'.$theme.'/title.php';
+        else include 'theme/classic/title.php';
+
+        if ($files) {
+            if (file_exists('theme/'.$theme.'/body.php')) include 'theme/'.$theme.'/body.php';
+            else include 'theme/classic/body.php';
+        }
+?>
+</body>
+<?php
+        if (file_exists('theme/'.$theme.'/operate.php')) include 'theme/'.$theme.'/operate.php';
+        else include 'theme/classic/operate.php';
+
+        if (file_exists('theme/'.$theme.'/foot.php')) include 'theme/'.$theme.'/foot.php';
+        else include 'theme/classic/foot.php';
+
+        if (file_exists('theme/'.$theme.'/script-pre.php')) include 'theme/'.$theme.'/script-pre.php';
+        else include 'theme/classic/script-pre.php';
+
+        if (file_exists('theme/'.$theme.'/script.php')) include 'theme/'.$theme.'/script.php';
+        else include 'theme/classic/script.php';
+
+        if (file_exists('theme/'.$theme.'/script-aft.php')) include 'theme/'.$theme.'/script-aft.php';
+        else include 'theme/classic/script-aft.php';
+
+        $script = getConfig('custom-script');
+        if ($script!='') echo $script;
+?>
+</html>
+<?php
+    }
 
     $html = '<!--
     Github ： https://github.com/qkqpttgf/OneManager-php
