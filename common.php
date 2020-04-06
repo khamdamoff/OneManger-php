@@ -16,8 +16,8 @@ $Base64Env = [
     //'timezone',
     //'passfile',
     'sitename',
-    'custom-script',
-    'custom-style',
+    'customScript',
+    'customStyle',
     //'theme',
     //'Drive_ver',
     //'Drive_custom',
@@ -50,8 +50,8 @@ $CommonEnv = [
     'timezone',
     'passfile',
     'sitename',
-    'custom-script',
-    'custom-style',
+    'customScript',
+    'customStyle',
     'theme',
 ];
 
@@ -69,8 +69,8 @@ $ShowedCommonEnv = [
     'timezone',
     'passfile',
     'sitename',
-    'custom-script',
-    'custom-style',
+    'customScript',
+    'customStyle',
     'theme',
 ];
 
@@ -1321,7 +1321,7 @@ function render_list($path = '', $files = '')
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
 <?php
-        $style = getConfig('custom-style');
+        $style = getConfig('customStyle');
         if ($style!='') {
             echo $style;
         } else {
@@ -1361,7 +1361,7 @@ function render_list($path = '', $files = '')
         if (file_exists('theme/'.$theme.'/script-aft.php')) include 'theme/'.$theme.'/script-aft.php';
         else include 'theme/classic/script-aft.php';
 
-        $script = getConfig('custom-script');
+        $script = getConfig('customScript');
         if ($script!='') echo $script;
 ?>
 </html>
@@ -1666,7 +1666,7 @@ function EnvOpt($needUpdate = 0)
         }*/ else $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
-            <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . htmlspecialchars(getConfig($key)) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
         </tr>';
     }
     $html .= '
