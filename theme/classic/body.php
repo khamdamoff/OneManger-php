@@ -110,8 +110,8 @@
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
                         <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?>&nbsp;<button onclick="CopyAllDownloadUrl('.download');"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
-                        <th class="updated_at" width="25%"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
-                        <th class="size" width="15%"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
+                        <th class="updated_at"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
+                        <th class="size"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
                     </tr>
                     <!-- Dirs -->
 <?php               //echo json_encode($files['children'], JSON_PRETTY_PRINT);
