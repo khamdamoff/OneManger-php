@@ -386,6 +386,8 @@ function isHideFile($name)
     $FunctionalityFile = [
         'head.md',
         'readme.md',
+        'head.omf',
+        'readme.omf',
         'favicon.ico',
     ];
 
@@ -1316,8 +1318,8 @@ function render_list($path = '', $files = '')
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>">
-    <meta name="description" content="<?php if ($_GET['preview']) echo 'Preview of '.$n_path; else echo 'List of '.$n_path; ?>. OneManager(An index & manager of Onedrive auth by ysun).">
+    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,An index & manager of Onedrive auth by ysun">
+    <meta name="description" content="<?php if ($_GET['preview']) echo 'Preview of '.$n_path.'. '; elseif (isset($files['folder'])) echo 'List of '.$n_path.'. '; echo 'In '.$_SERVER['sitename']; ?>">
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
 <?php
@@ -1340,8 +1342,40 @@ function render_list($path = '', $files = '')
         else include 'theme/classic/title.php';
 
         if ($files) {
+            if (isset($files['children']['head.omf'])) {
+?>
+    <div class="list-wrapper" id="head-om-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="customfile" id="head-om">
+                        <?php echo fetch_files(spurlencode(path_format($path . '/head.omf'),'/'))['content']['body']; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+            }
+
             if (file_exists('theme/'.$theme.'/body.php')) include 'theme/'.$theme.'/body.php';
             else include 'theme/classic/body.php';
+
+            if (isset($files['children']['foot.omf'])) {
+?>
+    <div class="list-wrapper" id="foot-om-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="customfile" id="foot-om">
+                        <?php echo fetch_files(spurlencode(path_format($path . '/foot.omf'),'/'))['content']['body']; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+            }
         }
 ?>
 </body>
