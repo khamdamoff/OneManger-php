@@ -389,7 +389,7 @@ function isHideFile($name)
         'head.md',
         'readme.md',
         'head.omf',
-        'readme.omf',
+        'foot.omf',
         'favicon.ico',
     ];
 
