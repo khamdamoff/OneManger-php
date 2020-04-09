@@ -1260,7 +1260,7 @@ function render_list($path = '', $files = '')
     global $constStr;
 
     if (isset($files['children']['index.html']) && !$_SERVER['admin']) {
-        $htmlcontent = fetch_files(spurlencode(path_format($path . '/index.html'),'/'))['content'];
+        $htmlcontent = fetch_files(spurlencode(path_format(urldecode($path) . '/index.html'),'/'))['content'];
         return output($htmlcontent['body'], $htmlcontent['stat']);
     }
     $path = str_replace('%20','%2520',$path);
@@ -1351,7 +1351,7 @@ function render_list($path = '', $files = '')
             <div class="list-header-container">
                 <div class="readme">
                     <div class="customfile" id="head-om">
-                        <?php echo fetch_files(spurlencode(path_format($path . '/head.omf'),'/'))['content']['body']; ?>
+                        <?php echo fetch_files(spurlencode(path_format(urldecode($path) . '/head.omf'),'/'))['content']['body']; ?>
                     </div>
                 </div>
             </div>
@@ -1370,7 +1370,7 @@ function render_list($path = '', $files = '')
             <div class="list-header-container">
                 <div class="readme">
                     <div class="customfile" id="foot-om">
-                        <?php echo fetch_files(spurlencode(path_format($path . '/foot.omf'),'/'))['content']['body']; ?>
+                        <?php echo fetch_files(spurlencode(path_format(urldecode($path) . '/foot.omf'),'/'))['content']['body']; ?>
                     </div>
                 </div>
             </div>
