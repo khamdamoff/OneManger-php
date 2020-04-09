@@ -5,7 +5,7 @@
             <div class="list-header-container">
                 <div class="readme">
                     <div class="markdown-body" id="head">
-                        <textarea id="head-md" style="display:none;"><?php echo fetch_files(spurlencode(path_format($path . '/head.md'),'/'))['content']['body']; ?></textarea>
+                        <textarea id="head-md" style="display:none;"><?php echo fetch_files(spurlencode(path_format(urldecode($path) . '/head.md'),'/'))['content']['body']; ?></textarea>
                     </div>
                 </div>
             </div>
@@ -255,7 +255,7 @@
             <div class="list-header-container">
                 <div class="readme">
                     <div class="markdown-body" id="readme">
-                        <textarea id="readme-md" style="display:none;">' . fetch_files(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'] . '</textarea>
+                        <textarea id="readme-md" style="display:none;">' . fetch_files(spurlencode(path_format(urldecode($path) . '/readme.md'),'/'))['content']['body'] . '</textarea>
                     </div>
                 </div>
 ';
