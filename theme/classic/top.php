@@ -1,4 +1,4 @@
-<div style="padding:1px">
+    <div style="padding:1px" id="top-div">
 <?php
     if (getConfig('admin')!='') if (!$_SERVER['admin']) {
         if (getConfig('adminloginpage')=='') { ?>
