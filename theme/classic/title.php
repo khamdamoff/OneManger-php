@@ -1,9 +1,9 @@
-    <h1 class="title">
+    <h1 class="title" id="title">
         <a href="<?php echo $_SERVER['base_path']; ?>"><?php echo $_SERVER['sitename']; ?></a>
     </h1>
 <?php $disktags = explode("|",getConfig('disktag'));
     if (count($disktags)>1) { ?>
-    <div class="list-wrapper">
+    <div class="list-wrapper" id="more-disk-div">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="more-disk">
