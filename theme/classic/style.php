@@ -1,4 +1,3 @@
-    <style type="text/css">
         body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:15px;vertical-align:bottom}
@@ -44,4 +43,3 @@
             .list-table td, .list-table th{white-space:nowrap;overflow:auto;max-width:80px}
             .size, .updated_at{display:none}
         }
-    </style>
