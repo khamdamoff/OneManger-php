@@ -1333,15 +1333,13 @@ function render_list($path = '', $files = '')
     <meta name="description" content="<?php if ($_GET['preview']) echo 'Preview of '.$n_path.'. '; elseif (isset($files['folder'])) echo 'List of '.$n_path.'. '; echo 'In '.$_SERVER['sitename']; ?>">
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
+    <style type="text/css">
 <?php
-        $style = getConfig('customStyle');
-        if ($style!='') {
-            echo $style;
-        } else {
-            if (file_exists('theme/'.$theme.'/style.css')) include 'theme/'.$theme.'/style.css';
-            else include 'theme/classic/style.css';
-        }
+        if (file_exists('theme/'.$theme.'/style.php')) include 'theme/'.$theme.'/style.php';
+        else include 'theme/classic/style.php';
+        echo getConfig('customStyle');
 ?>
+    </style>
 </head>
 
 <body>
@@ -1416,7 +1414,7 @@ function render_list($path = '', $files = '')
     $html = '<!--
     Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
-    //if (isset($htmlpage['statusCode'])) return $htmlpage;
+
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);
 }
