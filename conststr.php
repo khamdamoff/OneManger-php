@@ -332,6 +332,10 @@ $constStr = [
         'ko-kr' => '모든 다운로드 링크 복사',
         'fa' => 'کپی از تمام لینک ها',
     ],
+    'Search' => [
+        'en-us' => 'Search',
+        'zh-cn' => '搜索',
+    ],
     'EditTime' => [
         'en-us' => 'EditTime',
         'zh-cn' => '修改时间',
@@ -401,6 +405,14 @@ $constStr = [
         'ja' => 'アップロードする',
         'ko-kr' => '업로드',
         'fa' => 'آپلود',
+    ],
+    'UploadFile' => [
+        'en-us' => 'Upload File(s)',
+        'zh-cn' => '上传文件',
+    ],
+    'UploadFolder' => [
+        'en-us' => 'Upload Folder',
+        'zh-cn' => '上传文件夹',
     ],
     'FileSelected' => [
         'en-us' => 'Select File',
