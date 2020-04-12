@@ -243,10 +243,17 @@ function main($path)
         }
 
         if ($_SERVER['ajax']) {
-            if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
+            if ($_GET['action']=='del_upload_cache') {
                 // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
                 error_log('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
-                $tmp = MSAPI('DELETE',path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($_GET['filename']) ),'',$_SERVER['access_token']);
+                $tmp = splitlast($_GET['filename'], '/');
+                if ($tmp[1]!='') {
+                    $filename = $tmp[0] . '/.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $tmp[1] . '.tmp';
+                } else {
+                    $filename = '.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $_GET['filename'] . '.tmp';
+                }
+                $filename = path_format( path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($filename, '/') );
+                $tmp = MSAPI('DELETE', $filename, '', $_SERVER['access_token']);
                 $path1 = path_format($_SERVER['list_path'] . path_format($path));
                 if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
                 savecache('path_' . $path1, json_decode('{}',true), 1);
@@ -777,11 +784,17 @@ function bigfileupload($path)
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
     if (substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     if ($_GET['upbigfilename']!=''&&$_GET['filesize']>0) {
-        $fileinfo['name'] = $_GET['upbigfilename'];
+        $tmp = splitlast($_GET['upbigfilename'], '/');
+        if ($tmp[1]!='') {
+            $fileinfo['name'] = $tmp[1];
+            $fileinfo['path'] = $tmp[0];
+        } else {
+            $fileinfo['name'] = $_GET['upbigfilename'];
+        }
         $fileinfo['size'] = $_GET['filesize'];
         $fileinfo['lastModified'] = $_GET['lastModified'];
-        $filename = spurlencode( $fileinfo['name'] );
-        $cachefilename = '.' . $fileinfo['lastModified'] . '_' . $fileinfo['size'] . '_' . $filename . '.tmp';
+        $filename = spurlencode($_GET['upbigfilename'],'/');
+        $cachefilename = spurlencode( $fileinfo['path'] . '/.' . $fileinfo['lastModified'] . '_' . $fileinfo['size'] . '_' . $fileinfo['name'] . '.tmp', '/');
         $getoldupinfo=fetch_files(path_format($path . '/' . $cachefilename));
         //echo json_encode($getoldupinfo, JSON_PRETTY_PRINT);
         if (isset($getoldupinfo['file'])&&$getoldupinfo['size']<5120) {
