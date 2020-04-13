@@ -697,7 +697,8 @@ function needUpdate()
     $current_ver = substr($current_ver, strpos($current_ver, '.')+1);
     $current_ver = explode(urldecode('%0A'),$current_ver)[0];
     $current_ver = explode(urldecode('%0D'),$current_ver)[0];
-    $github_version = file_get_contents('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
+    //$github_version = file_get_contents('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
+    $github_version = curl_request('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version')['body'];
     $github_ver = substr($github_version, strpos($github_version, '.')+1);
     $github_ver = explode(urldecode('%0A'),$github_ver)[0];
     $github_ver = explode(urldecode('%0D'),$github_ver)[0];
@@ -1342,7 +1343,7 @@ function render_list($path = '', $files = '')
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,An index & manager of Onedrive auth by ysun">
+    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager">
     <meta name="description" content="<?php if ($_GET['preview']) echo 'Preview of '.$n_path.'. '; elseif (isset($files['folder'])) echo 'List of '.$n_path.'. '; echo 'In '.$_SERVER['sitename']; ?>">
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
@@ -1425,6 +1426,7 @@ function render_list($path = '', $files = '')
     }
 
     $html = '<!--
+    OneManager: An index & manager of Onedrive auth by ysun.
     Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
 
