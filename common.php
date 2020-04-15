@@ -1112,7 +1112,7 @@ function fetch_files($path = '/')
             $url .= ':' . $path;
             if (substr($url,-1)=='/') $url=substr($url,0,-1);
         }
-        $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'].')';
+        $url .= '?expand=children(select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'].')';
         $retry = 0;
         $arr = [];
         while ($retry<3&&!$arr['stat']) {
@@ -1128,13 +1128,23 @@ function fetch_files($path = '/')
                     $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
                     if ($page>1) $files=fetch_files_children($files, $path1, $page);
                     $files['children'] = children_name($files['children']);
-                } else {
+                    /*$url = $_SERVER['api_url'];
+                    if ($path !== '/') {
+                        $url .= ':' . $path;
+                        if (substr($url,-1)=='/') $url=substr($url,0,-1);
+                        $url .= ':/children?$top=9999&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                    } else {
+                        $url .= '/children?$top=9999&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                    }
+                    $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
+                    $files['children'] = $children['value'];*/
+                }// else {
                 // files num < 200 , then cache
                     //if (isset($files['children'])) {
                         $files['children'] = children_name($files['children']);
                     //}
                     savecache('path_' . $path, $files);
-                }
+                //}
             }
             if (isset($files['file'])) {
                 if (in_array(splitlast($files['name'],'.')[1], $exts['txt'])) {
@@ -1203,9 +1213,9 @@ function fetch_files_children($files, $path, $page)
                     if ($path !== '/') {
                         $url .= ':' . $path;
                         if (substr($url,-1)=='/') $url=substr($url,0,-1);
-                        $url .= ':/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                        $url .= ':/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
                     } else {
-                        $url .= '/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                        $url .= '/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
                     }
                     $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                     // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
