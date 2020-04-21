@@ -92,6 +92,7 @@ $InnerEnv = [
     'public_path',
     'refresh_token',
     'token_expires',
+    'tongji',
 ];
 
 $ShowedInnerEnv = [
@@ -473,6 +474,7 @@ function get_siteid($access_token)
 {
     if (getConfig('Drive_ver')=='MS') $url = 'https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname');
     if (getConfig('Drive_ver')=='CN') $url = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/root:/sites/'.getConfig('sharepointname');
+    if (getConfig('tongji')=='on') $url = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/root:/teams/'.getConfig('sharepointname');
     $i=0;
     $response = [];
     while ($url!=''&&$response['stat']!=200&&$i<4) {
@@ -1525,6 +1527,7 @@ function get_refresh_token()
                 if ($_POST['usesharepoint']=='on') {
                     $tmp['usesharepoint'] = $_POST['usesharepoint'];
                     $tmp['sharepointname'] = $_POST['sharepointname'];
+                    $tmp['tongji'] = $_POST['tongji'];
                 }
             }
             $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
@@ -1571,6 +1574,7 @@ function get_refresh_token()
             </div>
             <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('UseSharepointInstead').'</label><br>
             <div id="sharepoint" style="display:none;margin:10px 35px">
+                <label><input type="checkbox" name="tongji">同济勾上这个</label><br>
                 '.getconstStr('GetSharepointName').'<br>
                 <input type="text" name="sharepointname" placeholder="'.getconstStr('InputSharepointName').'"><br>
             </div>
